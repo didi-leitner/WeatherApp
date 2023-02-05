@@ -16,12 +16,12 @@ class FakeWeatherAlertsRepository: IWeatherAlertsRepository {
     companion object {
         private val date = Instant.now().toString()
 
-        private val l1 = WeatherAlert("id1","hurricane","missionName1", date, "sender1")
-        private val l2 = WeatherAlert("id2","fog","missionName2", date, "Sender Two")
-        private val l3 = WeatherAlert("id3","heavy snowfall","missionName3", date, "Sender Three")
-        private val l4 = WeatherAlert("id4","tsunami","missionName4", date, "GOV")
-        private val l5 = WeatherAlert("id5","volcano explosion","missionName5", date, "Random sender")
-        private val l6 = WeatherAlert("id6","earthquake","missionName6", date, "sndr")
+        private val l1 = WeatherAlert("id1","hurricane",date, date, "sender1")
+        private val l2 = WeatherAlert("id2","fog",date, date, "Sender Two")
+        private val l3 = WeatherAlert("id3","heavy snowfall",date, date, "Sender Three")
+        private val l4 = WeatherAlert("id4","tsunami",date, date, "GOV")
+        private val l5 = WeatherAlert("id5","volcano explosion", date, date, "Random sender")
+        private val l6 = WeatherAlert("id6","earthquake", date, date, "sndr")
 
 
         val fakeAlerts = listOf<WeatherAlert>(l1, l2, l3, l4, l5, l6)

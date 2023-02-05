@@ -40,8 +40,10 @@ class WeatherAppSDK (databaseDriverFactory: DatabaseDriverFactory) {
     suspend fun getAllLaunchesOld(): List<WeatherAlertEntity> {
         //return database.getAllLaunchesOld()
 
+        println("TESTT111")
         val cachedLaunches = database.getAllAlertsOld()
 
+        println("TESTTT222")
         if (cachedLaunches.isNotEmpty()) {
 
             return cachedLaunches

@@ -44,7 +44,7 @@ fun WeatherAlertCardExpanded(
             Row {
                 //TODO maybe download smaller/bigger images based on screen-size
                 CardHeaderImage("https://picsum.photos/seed/"
-                        +alert.id+"/600/900")//1000")
+                        +alert.id+"/900/600")//1000")
             }
 
             Box(
@@ -104,18 +104,12 @@ fun CardHeaderImage(
     headerImageUrl: String?,
 ) {
     AsyncImage(
-        /*placeholder = if (LocalInspectionMode.current) {
-            painterResource(DesignsystemR.drawable.ic_placeholder_default)
-        } else {
-            // TODO b/228077205, show specific loading image visual
-            null
-        },*/
+
         modifier = Modifier
             .fillMaxWidth()
-            .height(180.dp),
+            .height(100.dp),
         contentScale = ContentScale.Crop,
         model = headerImageUrl,
-        // TODO b/226661685: Investigate using alt text of  image to populate content description
         contentDescription = null, // decorative image
     )
 }
@@ -125,7 +119,7 @@ fun CardHeaderImage(
 @RequiresApi(Build.VERSION_CODES.O)
 fun dateFormatted(publishDate: Instant): String {
 
-    val FORMATTER: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy MMM dd' 'HH:mm:ss")
+    val FORMATTER: DateTimeFormatter = DateTimeFormatter.ofPattern("yyyy MMM dd' 'HH:mm")
 
     return FORMATTER.withZone(ZoneId.systemDefault()).format(publishDate.toJavaInstant())
 }
