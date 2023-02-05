@@ -1,9 +1,22 @@
-plugins {
-    //trick: for the same plugin versions in all sub-modules
-    id("com.android.application").version("8.0.0-beta01").apply(false)
-    id("com.android.library").version("8.0.0-beta01").apply(false)
-    kotlin("android").version("1.8.0").apply(false)
-    kotlin("multiplatform").version("1.8.0").apply(false)
+buildscript {
+    repositories {
+        gradlePluginPortal()
+        google()
+        mavenCentral()
+    }
+    dependencies {
+
+        //updated from 1.6.10 to 1.7.10
+        classpath("org.jetbrains.kotlin:kotlin-gradle-plugin:1.7.10")
+        classpath("com.android.tools.build:gradle:7.3.1")
+    }
+}
+
+allprojects {
+    repositories {
+        google()
+        mavenCentral()
+    }
 }
 
 tasks.register("clean", Delete::class) {
