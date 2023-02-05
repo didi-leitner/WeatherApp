@@ -1,4 +1,4 @@
-package com.didi.weatherapp.android.repository.interfaces
+package com.didi.weatherapp.repository.interfaces
 
 import com.didi.weatherapp.db.WeatherAlertEntity
 import com.didi.weatherapp.model.WeatherAlert

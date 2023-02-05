@@ -1,7 +1,7 @@
 package com.didi.weatherapp.android.feed
 
 import androidx.lifecycle.*
-import com.didi.weatherapp.android.repository.interfaces.IWeatherAlertsRepository
+import com.didi.weatherapp.repository.interfaces.IWeatherAlertsRepository
 import com.didi.weatherapp.model.WeatherAlert
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow

@@ -32,7 +32,7 @@ import androidx.compose.ui.unit.dp
 import androidx.core.view.doOnPreDraw
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.didi.weatherapp.android.repository.fake.FakeWeatherAlertsRepository
+import com.didi.weatherapp.repository.fake.FakeWeatherAlertsRepository
 import com.didi.weatherapp.model.WeatherAlert
 import org.koin.androidx.compose.koinViewModel
 import androidx.compose.foundation.lazy.grid.items

@@ -33,7 +33,6 @@ import com.didi.weatherapp.model.WeatherAlert
 fun WeatherAlertCardExpanded(
     alert: WeatherAlert,
     onClick: () -> Unit,
-    modifier: Modifier = Modifier,
 ) {
     Card(
         onClick = onClick,

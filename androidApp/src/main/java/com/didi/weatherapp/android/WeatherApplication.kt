@@ -3,8 +3,8 @@ package com.didi.weatherapp.android
 import android.app.Application
 import com.didi.weatherapp.WeatherAppSDK
 import com.didi.weatherapp.android.feed.WeatherFeedViewModel
-import com.didi.weatherapp.android.repository.WeatherRepo
-import com.didi.weatherapp.android.repository.interfaces.IWeatherAlertsRepository
+import com.didi.weatherapp.repository.WeatherRepo
+import com.didi.weatherapp.repository.interfaces.IWeatherAlertsRepository
 import com.didi.weatherapp.db.DatabaseDriverFactory
 import org.koin.core.KoinApplication
 import org.koin.core.context.startKoin
