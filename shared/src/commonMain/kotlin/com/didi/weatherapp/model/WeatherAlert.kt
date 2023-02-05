@@ -2,13 +2,13 @@ package com.didi.weatherapp.model
 
 
 data class WeatherAlert (
+    val id: String,
     val event: String,
     val startDateUTC: String,
     val endDateUTC: String,
     val sender: String,
 ){
 
-    //var endDateFormated = launchDateUTC.toInstant().toLocalDateTime(TimeZone.UTC)
 }
 
 

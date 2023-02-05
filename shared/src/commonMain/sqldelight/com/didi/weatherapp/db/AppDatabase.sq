@@ -1,4 +1,5 @@
 CREATE TABLE WeatherAlertEntity (
+    id TEXT NOT NULL,
     event TEXT NOT NULL,
     startDateUTC TEXT NOT NULL,
     endDateUTC TEXT NOT NULL,
@@ -6,8 +7,8 @@ CREATE TABLE WeatherAlertEntity (
 );
 
 insertAlert:
-INSERT INTO WeatherAlertEntity(event, startDateUTC, endDateUTC, sender)
-VALUES(?, ?, ?, ?);
+INSERT INTO WeatherAlertEntity(id, event, startDateUTC, endDateUTC, sender)
+VALUES(?,?, ?, ?, ?);
 
 removeAllAlerts:
 DELETE FROM WeatherAlertEntity;

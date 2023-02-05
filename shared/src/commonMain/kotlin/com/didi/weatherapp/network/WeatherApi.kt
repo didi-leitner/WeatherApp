@@ -43,7 +43,7 @@ class WeatherApi {
         val networkObj = response.body<WeatherFeedNO>()
 
         return networkObj.features.map {
-            WeatherAlertEntity(it.properties.event, it.properties.startDate,
+            WeatherAlertEntity(it.properties.id, it.properties.event, it.properties.startDate,
                 it.properties.endDate, it.properties.sender)
         }
 

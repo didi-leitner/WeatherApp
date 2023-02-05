@@ -3,15 +3,13 @@ package com.didi.weatherapp.android
 import android.os.Bundle
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.*
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
-import androidx.lifecycle.lifecycleScope
-import com.didi.weatherapp.Greeting
-import com.didi.weatherapp.network.WeatherApi
-import kotlinx.coroutines.launch
+import androidx.compose.runtime.Stable
+import androidx.compose.runtime.remember
+import androidx.navigation.NavDestination
+import androidx.navigation.NavHostController
+import androidx.navigation.compose.currentBackStackEntryAsState
+import androidx.navigation.compose.rememberNavController
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -20,29 +18,24 @@ class MainActivity : ComponentActivity() {
 
 
         setContent {
-            MyApplicationTheme {
-                Surface(
-                    modifier = Modifier.fillMaxSize(),
-                    color = MaterialTheme.colors.background
-                ) {
-                    GreetingView(Greeting().greet())
-                }
+            val navController = rememberNavController()
+            val appState: WeatherAppState =  remember(navController) {
+                WeatherAppState(navController)
             }
+            WeatherAppContent(appState = appState)
         }
 
 
     }
 }
 
-@Composable
-fun GreetingView(text: String) {
-    Text(text = text)
+@Stable
+class WeatherAppState(
+    val navController: NavHostController,
+) {
+    val currentDestination: NavDestination?
+        @Composable get() = navController.currentBackStackEntryAsState().value?.destination
 }
 
-@Preview
-@Composable
-fun DefaultPreview() {
-    MyApplicationTheme {
-        GreetingView("Hello, Android!")
-    }
-}
+
+

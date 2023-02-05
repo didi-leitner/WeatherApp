@@ -29,13 +29,14 @@ internal class Database(databaseDriverFactory: DatabaseDriverFactory) {
     }
 
     private fun mapWAlertSelecting(
+        id: String,
         event: String,
         startDateUTC: String,
         endDateUTC: String,
         sender: String
     ): WeatherAlertEntity {
 
-        return WeatherAlertEntity(event, startDateUTC, endDateUTC, sender)
+        return WeatherAlertEntity(id, event, startDateUTC, endDateUTC, sender)
     }
 
     internal fun createWeatherAlert(alerts: List<WeatherAlertEntity>, clear: Boolean) {
@@ -53,6 +54,7 @@ internal class Database(databaseDriverFactory: DatabaseDriverFactory) {
 
     private fun insertWeatherAlert(alert: WeatherAlertEntity) {
         dbQuery.insertAlert(
+            id = alert.id,
             event = alert.event,
             startDateUTC = alert.startDateUTC,
             endDateUTC = alert.endDateUTC,

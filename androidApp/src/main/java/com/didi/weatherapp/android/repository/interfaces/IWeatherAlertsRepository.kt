@@ -1,10 +1,11 @@
 package com.didi.weatherapp.android.repository.interfaces
 
 import com.didi.weatherapp.db.WeatherAlertEntity
+import com.didi.weatherapp.model.WeatherAlert
 import kotlinx.coroutines.flow.Flow
 
 interface IWeatherAlertsRepository {
-    fun getAlertsFromDB(): Flow<List<WeatherAlertEntity>>
+    fun getAlertsFromDB(): Flow<List<WeatherAlert>>
 
-    suspend fun getLaunchesFromAPI(): List<WeatherAlertEntity>
+    suspend fun refreshLaunchesFromAPI(): List<WeatherAlert>
 }

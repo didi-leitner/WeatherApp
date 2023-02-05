@@ -2,6 +2,7 @@ package com.didi.weatherapp.android
 
 import android.app.Application
 import com.didi.weatherapp.WeatherAppSDK
+import com.didi.weatherapp.android.feed.WeatherFeedViewModel
 import com.didi.weatherapp.android.repository.WeatherRepo
 import com.didi.weatherapp.android.repository.interfaces.IWeatherAlertsRepository
 import com.didi.weatherapp.db.DatabaseDriverFactory
@@ -31,9 +32,8 @@ class WeatherApplication:  Application() {
         },
 
         viewModelsModule: Module = module {
-            //single { RocketLaunchesScreenViewModel(get()) }
+            single { WeatherFeedViewModel(get()) }
         },
-
 
         ): KoinApplication = startKoin {
 
@@ -44,3 +44,4 @@ class WeatherApplication:  Application() {
         )
     }
 }
+
