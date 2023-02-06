@@ -44,13 +44,13 @@ extension ContentView {
     }
 
     class ViewModel: ObservableObject {
-        let sdk: WeatherAppSDK
+        let repo: WeatherRepo
         @Published var launches = LoadableLaunches.loading
         //private var pollShoppingListItemsTask: Task<(), Never>? = nil
 
 
-        init(sdk: WeatherAppSDK) {
-            self.sdk = sdk
+        init(repo: WeatherRepo) {
+            self.repo = repo
             self.getAllLaunches(forceReload: false)
 
             /*pollShoppingListItemsTask = Task {
@@ -75,7 +75,7 @@ extension ContentView {
             self.launches = .loading
 
 
-            sdk.getAllLaunchesOld(completionHandler: { launches, error in
+            repo.getAllLaunchesOld(completionHandler: { launches, error in
                        if let launches = launches {
                            self.launches = .result(
                             launches.map{(WeatherAlertEntity)-> WeatherAlert in

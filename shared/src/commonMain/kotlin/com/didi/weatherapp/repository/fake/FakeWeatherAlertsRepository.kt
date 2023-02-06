@@ -2,6 +2,7 @@ package com.didi.weatherapp.repository.fake
 
 
 
+import com.didi.weatherapp.db.WeatherAlertEntity
 import com.didi.weatherapp.repository.interfaces.IWeatherAlertsRepository
 import com.didi.weatherapp.model.WeatherAlert
 import kotlinx.coroutines.flow.Flow
@@ -30,5 +31,9 @@ class FakeWeatherAlertsRepository: IWeatherAlertsRepository {
 
     override suspend fun refreshLaunchesFromAPI(): List<WeatherAlert> {
         return listOf(l2, l3)
+    }
+
+    override suspend fun getAllLaunchesOld(): List<WeatherAlert> {
+        return fakeAlerts
     }
 }

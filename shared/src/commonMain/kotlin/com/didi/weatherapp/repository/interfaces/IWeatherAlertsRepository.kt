@@ -8,4 +8,7 @@ interface IWeatherAlertsRepository {
     fun getAlertsFromDB(): Flow<List<WeatherAlert>>
 
     suspend fun refreshLaunchesFromAPI(): List<WeatherAlert>
+
+    suspend fun getAllLaunchesOld(): List<WeatherAlert>
+
 }

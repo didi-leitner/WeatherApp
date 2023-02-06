@@ -31,7 +31,7 @@ class WeatherApi {
         install(HttpTimeout) {
             //doesn't seem to work
             //https://ktor.io/docs/timeout.html#limitations
-            requestTimeoutMillis = 3000
+            requestTimeoutMillis = 10000
         }
 
     }

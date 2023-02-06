@@ -16,7 +16,6 @@ class WeatherAppSDK (databaseDriverFactory: DatabaseDriverFactory) {
     private val api = WeatherApi()
 
     @Throws(Exception::class) fun getAlertsFromDB(): Flow<List<WeatherAlertEntity>> {
-        //TODO format in repo //var endDateFormated = launchDateUTC.toInstant().toLocalDateTime(TimeZone.UTC)
         return database.getWeatherAlerts()
 
     }
@@ -38,14 +37,9 @@ class WeatherAppSDK (databaseDriverFactory: DatabaseDriverFactory) {
 
     //old method
     suspend fun getAllLaunchesOld(): List<WeatherAlertEntity> {
-        //return database.getAllLaunchesOld()
 
-        println("TESTT111")
         val cachedLaunches = database.getAllAlertsOld()
-
-        println("TESTTT222")
         if (cachedLaunches.isNotEmpty()) {
-
             return cachedLaunches
         } else {
 
