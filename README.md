@@ -6,11 +6,21 @@ Since Kotlin Multiplatform was promoted to Beta recently (october 2022), i wante
 
 Tech-stack: Jetpack Compose, Kotlin Coroutines, Ktor, SQLDelight, Koin, Coil
 
-Architecture:
-Used the clean architecture approach.
+(Clean) Architecture:
 In the SHARED module, in commonsMain, there are the packages that would correspond to core modules (db, network, model etc), shared between the Android and the iOS app. 
-For simplicity i left them as packages, not Android modules/libraries.
-Lower-level layers
+For simplicity i left them as packages, not Android modules/libraries, but could be extracted to independent modules.
+
+Patterns used:
+#MVVM: View implemented with single-Activity and composable functions. (Swift on iOS) 
+Most of the composables are stateless, except the screen-level ones where the state is collected from the ViewModel in a lifecycle-aware manner.
+When there's a change in the observed state, the Composable will be recomposed.
+The viewModel observes a repositry, and supplies the data/view-state to the view. Also exposes public function to the view that represent user events (click, pull)
+
+#Repository pattern: Used a repository as an abstraction for the underlying data-sources (db, network). Gets and combines data from datasources. Also used an interface here, so the real repository can be swapped with a fake one when unit-testing the viewModels.
+
+#Dependency injection
+
+
 
 
 
