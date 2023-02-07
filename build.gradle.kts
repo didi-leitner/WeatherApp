@@ -1,3 +1,5 @@
+import org.jetbrains.kotlin.org.fusesource.jansi.AnsiRenderer.test
+
 buildscript {
     repositories {
         gradlePluginPortal()
@@ -22,3 +24,4 @@ allprojects {
 tasks.register("clean", Delete::class) {
     delete(rootProject.buildDir)
 }
+

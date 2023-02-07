@@ -14,6 +14,8 @@ android {
         targetSdk = 33
         versionCode = 1
         versionName = "1.0"
+        testInstrumentationRunner = "androidx.test.runner.AndroidJUnitRunner"
+
     }
     buildTypes {
         getByName("release") {
@@ -54,7 +56,6 @@ dependencies {
     implementation("androidx.compose.ui:ui-tooling:1.3.3")
     implementation("androidx.compose.material3:material3:1.0.1")
     implementation("androidx.compose.material3:material3-window-size-class:1.0.1")
-    implementation("androidx.compose.material:material:1.3.1")
 
     implementation("androidx.lifecycle:lifecycle-runtime-compose:2.6.0-alpha01")
     implementation("androidx.compose.runtime:runtime-tracing:1.0.0-alpha01")
@@ -76,6 +77,18 @@ dependencies {
 
     implementation("androidx.tracing:tracing-ktx:1.2.0-alpha01")
 
+
+    implementation("junit:junit:4.13.2")
+    testImplementation("junit:junit:4.13.2")
+
+    implementation ("org.jetbrains.kotlin:kotlin-test")
+    testImplementation ("org.jetbrains.kotlin:kotlin-test")
+
+    implementation ("org.jetbrains.kotlinx:kotlinx-coroutines-test:$1.6.4")
+    testImplementation ("org.jetbrains.kotlinx:kotlinx-coroutines-test:$1.6.4")
+
+    androidTestImplementation ("androidx.test.ext:junit:1.1.5")
+    androidTestImplementation ("androidx.compose.ui:ui-test-junit4:1.3.3")
 
 
 
