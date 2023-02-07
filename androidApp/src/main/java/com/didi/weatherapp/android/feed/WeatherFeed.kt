@@ -36,8 +36,9 @@ import com.didi.weatherapp.repository.fake.FakeWeatherAlertsRepository
 import com.didi.weatherapp.model.WeatherAlert
 import org.koin.androidx.compose.koinViewModel
 import androidx.compose.foundation.lazy.grid.items
-
-
+import androidx.compose.ui.platform.testTag
+import androidx.compose.ui.semantics.contentDescription
+import androidx.compose.ui.semantics.semantics
 
 
 @OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class,
@@ -110,7 +111,10 @@ fun WeatherFeedScreen(weatherAlerts: List<WeatherAlert>,
 
         }
 
-        PullRefreshIndicator(refreshing, pullRefreshState, Modifier.align(Alignment.TopCenter))
+        PullRefreshIndicator(refreshing, pullRefreshState, Modifier.align(Alignment.TopCenter)
+            .semantics { contentDescription = "pull-to-refresh" }
+            .testTag("pull-to-refresh")
+        )
     }
 
 }

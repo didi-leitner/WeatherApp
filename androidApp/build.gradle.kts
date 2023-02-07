@@ -9,7 +9,7 @@ plugins {
 android {
     compileSdk = 33
     defaultConfig {
-        applicationId = "app.antran.kmmhelloworld.framework.android"
+        applicationId = "com.didi.weatherapp.android"
         minSdk = 24
         targetSdk = 33
         versionCode = 1
@@ -89,6 +89,8 @@ dependencies {
 
     androidTestImplementation ("androidx.test.ext:junit:1.1.5")
     androidTestImplementation ("androidx.compose.ui:ui-test-junit4:1.3.3")
+
+    implementation("androidx.compose.ui:ui-test-manifest:1.0.0-beta05")
 
 
 
