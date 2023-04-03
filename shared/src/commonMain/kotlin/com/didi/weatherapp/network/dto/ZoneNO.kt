@@ -9,7 +9,7 @@ import kotlinx.serialization.Serializable
 class ZoneNO(
 
     @SerialName("properties")
-    val properties: ZoneProperties
+    val properties: ZoneProperties? = null
 
 )
 

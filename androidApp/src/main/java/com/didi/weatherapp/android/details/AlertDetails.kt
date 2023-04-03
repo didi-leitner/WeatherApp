@@ -13,6 +13,7 @@ import androidx.compose.foundation.interaction.MutableInteractionSource
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material3.Icon
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.*
@@ -20,6 +21,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.IntOffset
@@ -28,9 +30,12 @@ import androidx.compose.ui.zIndex
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
 import coil.compose.AsyncImage
+import com.didi.weatherapp.android.R
 import com.didi.weatherapp.android.feed.CardHeaderImage
 import com.didi.weatherapp.android.feed.dateFormatted
 import com.didi.weatherapp.model.WeatherAlert
+import com.didi.weatherapp.model.WeatherAlertDetail
+import com.didi.weatherapp.model.Zone
 import com.didi.weatherapp.repository.fake.FakeWeatherAlertsRepository
 import kotlinx.datetime.toInstant
 import kotlin.math.roundToInt
@@ -39,8 +44,12 @@ import kotlin.math.roundToInt
 @Preview
 @Composable
 fun preview(){
+    val fakeAlert = FakeWeatherAlertsRepository.fakeAlerts[0]
+    val zones = listOf<Zone>(Zone("MZT675", true))
     AlertDetailsScreen(
-        FakeWeatherAlertsRepository.fakeAlerts[0]
+        WeatherAlertDetail(fakeAlert.id, fakeAlert.startDateUTC, fakeAlert.endDateUTC,
+            fakeAlert.sender, fakeAlert.desc, fakeAlert.severity, fakeAlert.certainty,
+            fakeAlert.urgency, zones, fakeAlert.instruction)
     )
 }
 
@@ -60,11 +69,11 @@ the instructions (BONUS: make the instructions and description text to contain o
 */
 
 @Composable
-fun AlertDetailsScreen(alert: WeatherAlert?) {
+fun AlertDetailsScreen(alert: WeatherAlertDetail?) {
 
-    Column {
+    alert?.let { alert ->
+        Column {
 
-        alert?.let { alert ->
             Row(Modifier.zIndex(100f)) {
                 //TODO maybe download smaller/bigger images based on screen-size
                 DraggableCardHeaderImage(alert.pictureUrl)
@@ -117,20 +126,37 @@ fun AlertDetailsScreen(alert: WeatherAlert?) {
                     Text("Urgency: ${alert.urgency}", style = MaterialTheme.typography.bodyMedium)
                     Spacer(modifier = Modifier.height(12.dp))
 
-                    ExpandableText("Description: ${alert.desc}")
-                    Spacer(modifier = Modifier.height(12.dp))
+                    if(!alert.desc.isNullOrEmpty()){
+                        ExpandableText("Description: ${alert.desc}")
+                        Spacer(modifier = Modifier.height(12.dp))
+                    }
 
 
                     Text("Affected zones: ", style = MaterialTheme.typography.bodyMedium)
                     for(az in alert.affectedZones){
-                        Text(text = az, style = MaterialTheme.typography.bodyMedium)
-                        Spacer(modifier = Modifier.height(3.dp))
+                        if(!az.id.isNullOrEmpty()){
+                            Row{
+                                Text(text = az.id, style = MaterialTheme.typography.bodyMedium)
+                                if(az.isRadarStation){
+                                    Icon(modifier = Modifier.padding(5.dp,0.dp,0.dp,0.dp),
+                                        painter = painterResource(R.drawable.ic_radar),
+                                        tint = Color.Red,
+                                        contentDescription = "radar_icon"
+                                    )
+                                }
+                            }
+                            Spacer(modifier = Modifier.height(3.dp))
+                        }
+
 
                     }
                     Spacer(modifier = Modifier.height(9.dp))
 
-                    ExpandableText("Instructions: ${alert.instruction}")
-                    Spacer(modifier = Modifier.height(12.dp))
+                    if(!alert.instruction.isNullOrEmpty()){
+                        ExpandableText("Instructions: ${alert.instruction}")
+                        Spacer(modifier = Modifier.height(12.dp))
+                    }
+
 
                     Text("Source: ${alert.sender}", style = MaterialTheme.typography.bodySmall)
                     Spacer(modifier = Modifier.height(12.dp))
@@ -139,6 +165,8 @@ fun AlertDetailsScreen(alert: WeatherAlert?) {
 
                 }
             }
+
+
         }
 
     }
