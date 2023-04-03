@@ -1,17 +1,15 @@
 package com.didi.weatherapp.network
 
-import com.didi.weatherapp.db.WeatherAlertEntity
 import com.didi.weatherapp.model.WeatherAlert
 import com.didi.weatherapp.network.dto.WeatherFeedNO
+import com.didi.weatherapp.network.dto.ZoneNO
 import io.ktor.client.*
 import io.ktor.client.call.*
 import io.ktor.client.plugins.HttpTimeout
 import io.ktor.client.plugins.contentnegotiation.*
 import io.ktor.client.request.*
-import io.ktor.client.statement.bodyAsText
 import io.ktor.serialization.kotlinx.json.*
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.JsonElement
 
 class WeatherApi {
 
@@ -37,15 +35,23 @@ class WeatherApi {
     }
 
     @Throws (Exception::class)
-    suspend fun getWeatherAlerts(): List<WeatherAlertEntity> {
+    suspend fun getWeatherAlerts(): List<WeatherAlert> {
         val response= httpClient.get(BASE_URL + "alerts/active?status=actual&message_type=alert")
 
         val networkObj = response.body<WeatherFeedNO>()
 
         return networkObj.features.map {
-            WeatherAlertEntity(it.properties.id, it.properties.event, it.properties.startDate,
-                it.properties.endDate, it.properties.sender)
+            WeatherAlert(it.properties.id, it.properties.event, it.properties.startDate,
+                it.properties.endDate, it.properties.sender, it.properties.desc,
+                it.properties.severity, it.properties.certainty, it.properties.urgency,
+                it.properties.affectedZones, it.properties.instruction)
         }
 
+    }
+
+    @Throws (Exception::class)
+    suspend fun getZoneInfo(zoneCode: String): ZoneNO {
+        val response= httpClient.get(BASE_URL + "zones/forecast/"+zoneCode)
+        return response.body<ZoneNO>()
     }
 }

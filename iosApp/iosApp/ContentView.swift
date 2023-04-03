@@ -11,18 +11,18 @@ struct ContentView: View {
                  listView()
                  .navigationBarItems(trailing:
                      Button("Reload") {
-                         self.viewModel.getAllLaunches(forceReload: true)
+                         self.viewModel.getAllAlerts(forceReload: true)
                  })
              }
          }
 
          private func listView() -> AnyView {
-             switch viewModel.launches {
+             switch viewModel.alerts {
              case .loading:
                  return AnyView(Text("Loading...").multilineTextAlignment(.center))
-             case .result(let launches):
-                 return AnyView(List(launches) { launch in
-                     WeatherAlertCard(wAlert: launch)
+             case .result(let alerts):
+                 return AnyView(List(alerts) { alert in
+                     WeatherAlertCard(wAlert: alert)
                  })
              case .error(let description):
                  return AnyView(Text(description).multilineTextAlignment(.center))
@@ -45,13 +45,13 @@ extension ContentView {
 
     class ViewModel: ObservableObject {
         let repo: WeatherRepo
-        @Published var launches = LoadableLaunches.loading
+        @Published var alerts = LoadableLaunches.loading
         //private var pollShoppingListItemsTask: Task<(), Never>? = nil
 
 
         init(repo: WeatherRepo) {
             self.repo = repo
-            self.getAllLaunches(forceReload: false)
+            self.getAllAlerts(forceReload: false)
 
             /*pollShoppingListItemsTask = Task {
               do {
@@ -71,21 +71,30 @@ extension ContentView {
 
 
 
-        func getAllLaunches(forceReload: Bool)  {
-            self.launches = .loading
+        func getAllAlerts(forceReload: Bool)  {
+            self.alerts = .loading
 
 
-            repo.getAllLaunchesOld(completionHandler: { launches, error in
-                       if let launches = launches {
-                           self.launches = .result(
-                            launches.map{(WeatherAlertEntity)-> WeatherAlert in
+            repo.getAllAlertsIOS(completionHandler: { alerts, error in
+                       if let alerts = alerts {
+                           self.alerts = .result(
+                            alerts.map{(WeatherAlertEntity)-> WeatherAlert in
                                 return WeatherAlert(id: WeatherAlertEntity.id,
-                                                    event: WeatherAlertEntity.event, startDateUTC: WeatherAlertEntity.startDateUTC, endDateUTC: WeatherAlertEntity.endDateUTC, sender: WeatherAlertEntity.sender)
+                                                    event: WeatherAlertEntity.event,
+                                                    startDateUTC: WeatherAlertEntity.startDateUTC,
+                                                    endDateUTC: WeatherAlertEntity.endDateUTC,
+                                                    sender: WeatherAlertEntity.sender,
+                                                    desc: WeatherAlertEntity.desc,
+                                                    severity: WeatherAlertEntity.severity,
+                                                    certainty: WeatherAlertEntity.certainty,
+                                                    urgency: WeatherAlertEntity.urgency,
+                                                    affectedZones:WeatherAlertEntity.affectedZones,
+                                                    instruction: WeatherAlertEntity.instruction)
                                
                            })
                            
                            } else {
-                               self.launches = .error(error?.localizedDescription ?? "error")
+                               self.alerts = .error(error?.localizedDescription ?? "error")
                            }
                        })
 

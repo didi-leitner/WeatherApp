@@ -2,12 +2,10 @@ package com.didi.weatherapp.android.feed
 
 import android.app.Activity
 import android.os.Build
-
-import androidx.annotation.DrawableRes
 import androidx.annotation.RequiresApi
+
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
-import androidx.compose.foundation.layout.ExperimentalLayoutApi
 import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.lazy.grid.GridCells
@@ -19,48 +17,49 @@ import androidx.compose.material.pullrefresh.PullRefreshIndicator
 import androidx.compose.material.pullrefresh.PullRefreshState
 import androidx.compose.material.pullrefresh.pullRefresh
 import androidx.compose.material.pullrefresh.rememberPullRefreshState
-import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.platform.LocalView
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.core.view.doOnPreDraw
 import androidx.lifecycle.compose.ExperimentalLifecycleComposeApi
 import androidx.lifecycle.compose.collectAsStateWithLifecycle
-import com.didi.weatherapp.repository.fake.FakeWeatherAlertsRepository
 import com.didi.weatherapp.model.WeatherAlert
 import org.koin.androidx.compose.koinViewModel
 import androidx.compose.foundation.lazy.grid.items
 import androidx.compose.ui.platform.testTag
 import androidx.compose.ui.semantics.contentDescription
 import androidx.compose.ui.semantics.semantics
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.navigation.NavController
+import com.didi.weatherapp.repository.fake.FakeWeatherAlertsRepository
 
 
-@OptIn(ExperimentalMaterial3Api::class, ExperimentalLayoutApi::class,
-    ExperimentalMaterialApi::class
-)
+@OptIn(ExperimentalMaterialApi::class)
 @RequiresApi(Build.VERSION_CODES.O)
 @Preview
 @Composable
 fun preview(){
-    //RocketLaunchesRoute()
-    WeatherFeedScreen(FakeWeatherAlertsRepository.fakeAlerts,false, {})
+    WeatherFeedScreen(FakeWeatherAlertsRepository.fakeAlerts,false, {}, {} )
 }
+
+
 @OptIn(ExperimentalMaterialApi::class, ExperimentalLifecycleComposeApi::class)
 @Composable
-fun WeatherFeedRoute(viewModel: WeatherFeedViewModel = koinViewModel()) {
+fun WeatherFeedRoute(
+    viewModel: WeatherFeedViewModel = koinViewModel(),
+    onItemClicked: (id: String) -> Unit
+) {
 
     val feedState by viewModel.wAlers.collectAsStateWithLifecycle()//LaunchesFeedUiState.Loading)
 
     //pull-to-refresh https://google.github.io/accompanist/swiperefresh/#usage
     val refreshing by viewModel.isRefreshing.collectAsStateWithLifecycle()
 
-    WeatherFeedScreen(weatherAlerts = feedState, refreshing, {viewModel.refresh()})
+    WeatherFeedScreen(weatherAlerts = feedState, refreshing, {viewModel.refresh()}, onItemClicked)
 
 }
 
@@ -69,19 +68,16 @@ fun WeatherFeedRoute(viewModel: WeatherFeedViewModel = koinViewModel()) {
 fun WeatherFeedScreen(weatherAlerts: List<WeatherAlert>,
                       refreshing: Boolean,
                       refresh: ()->Unit,
+                      onItemClicked: (id: String) -> Unit,
                       pullRefreshState: PullRefreshState = rememberPullRefreshState(refreshing, { refresh() })
 )
 {
-
-    println("TESTT ROCKET laucnh screen " + weatherAlerts)
-
-    val isFeedLoading = refreshing//feedState is LaunchesFeedUiState.Loading
 
     // Workaround to call Activity.reportFullyDrawn from Jetpack Compose.
     // This code should be called when the UI is ready for use
     // and relates to Time To Full Display.
     // TODO replace with ReportDrawnWhen { } once androidx.activity-compose 1.7.0 is used (currently alpha)
-    if (!isFeedLoading) {
+    if (!refreshing) {
         val localView = LocalView.current
         // We use Unit to call reportFullyDrawn only on the first recomposition,
         // however it will be called again if this composable goes out of scope.
@@ -106,9 +102,7 @@ fun WeatherFeedScreen(weatherAlerts: List<WeatherAlert>,
                 .fillMaxSize(),
             state = scrollableState,
         ) {
-
-            wAlertsFeed(alertList = weatherAlerts)
-
+            wAlertsFeed(alertList = weatherAlerts, onItemClicked)
         }
 
         PullRefreshIndicator(refreshing, pullRefreshState, Modifier.align(Alignment.TopCenter)
@@ -119,13 +113,19 @@ fun WeatherFeedScreen(weatherAlerts: List<WeatherAlert>,
 
 }
 
-fun LazyGridScope.wAlertsFeed(alertList: List<WeatherAlert> ) {
+fun LazyGridScope.wAlertsFeed(alertList: List<WeatherAlert>, onAlertClick: (id:String) -> Unit) {
+    println("TESTT compose feed")
 
     items(items = alertList, key = { it.id}) { wAlert ->
 
         WeatherAlertCardExpanded(
             alert = wAlert, onClick = {
-                //TODO?
+                println("TESTT click!")
+
+                onAlertClick(wAlert.id)
+
+                println("TESTT over!")
+
             }
         )
     }
@@ -135,10 +135,3 @@ fun LazyGridScope.wAlertsFeed(alertList: List<WeatherAlert> ) {
 
 
 
-/**
- * A sealed class to make dealing with [ImageVector] and [DrawableRes] icons easier.
- */
-sealed class Icon {
-    data class ImageVectorIcon(val imageVector: ImageVector) : Icon()
-    data class DrawableResourceIcon(@DrawableRes val id: Int) : Icon()
-}

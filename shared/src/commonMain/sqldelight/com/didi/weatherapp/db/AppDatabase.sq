@@ -3,17 +3,28 @@ CREATE TABLE WeatherAlertEntity (
     event TEXT NOT NULL,
     startDateUTC TEXT NOT NULL,
     endDateUTC TEXT NOT NULL,
-    sender TEXT NOT NULL
+    sender TEXT NOT NULL,
+    desc TEXT,
+    severity TEXT NOT NULL,
+    certainty TEXT NOT NULL,
+    urgency TEXT NOT NULL,
+    affectedZones TEXT NOT NULL,
+    instruction TEXT
+
 );
 
 insertAlert:
-INSERT INTO WeatherAlertEntity(id, event, startDateUTC, endDateUTC, sender)
-VALUES(?,?, ?, ?, ?);
+INSERT INTO WeatherAlertEntity(id, event, startDateUTC, endDateUTC, sender, desc, severity, certainty, urgency, affectedZones, instruction)
+VALUES(?,?, ?, ?, ?, ? ,? ,?,?,?,?);
 
 removeAllAlerts:
 DELETE FROM WeatherAlertEntity;
 
 selectAllAlerts:
 SELECT WeatherAlertEntity.* FROM WeatherAlertEntity;
+
+selectAlert:
+SELECT WeatherAlertEntity.* FROM WeatherAlertEntity WHERE id = :id;
+
 
 

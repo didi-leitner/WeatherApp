@@ -23,7 +23,6 @@ class WeatherFeedViewModel (private val repoAlerts: IWeatherAlertsRepository): V
         )
 
     init {
-        println("TESTT ROCKET iNiT VIEWMODEL")
         refresh()
 
 
@@ -33,7 +32,7 @@ class WeatherFeedViewModel (private val repoAlerts: IWeatherAlertsRepository): V
         viewModelScope.launch(Dispatchers.IO) {
             isRefreshing.value = true
             //delay(5000)
-            repoAlerts.refreshLaunchesFromAPI() //will update DB, which is observed
+            repoAlerts.refreshAlertsFromAPI() //will update DB, which is observed
             isRefreshing.value = false
         }
     }

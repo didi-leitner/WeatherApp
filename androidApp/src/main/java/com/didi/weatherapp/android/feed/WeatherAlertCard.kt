@@ -2,6 +2,10 @@ package com.didi.weatherapp.android.feed
 
 import android.os.Build
 import androidx.annotation.RequiresApi
+import androidx.compose.foundation.ExperimentalFoundationApi
+import androidx.compose.foundation.clickable
+import androidx.compose.foundation.combinedClickable
+import androidx.compose.foundation.gestures.detectTapGestures
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -17,6 +21,8 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.geometry.Offset
+import androidx.compose.ui.input.pointer.pointerInput
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.unit.dp
 import kotlinx.datetime.Instant
@@ -41,9 +47,7 @@ fun WeatherAlertCardExpanded(
     ) {
         Column {
             Row {
-                //TODO maybe download smaller/bigger images based on screen-size
-                CardHeaderImage("https://picsum.photos/seed/"
-                        +alert.id+"/900/600")//1000")
+                CardHeaderImage(alert.pictureUrl)
             }
 
             Box(
@@ -100,7 +104,7 @@ fun WeatherAlertCardExpanded(
 
 @Composable
 fun CardHeaderImage(
-    headerImageUrl: String?,
+    headerImageUrl: String?
 ) {
     AsyncImage(
 

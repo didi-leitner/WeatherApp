@@ -23,7 +23,7 @@ class WeatherFeedScreenTest {
     @Test
     fun refreshing_shows_pull_to_refresh_Spinner() {
         composeTestRule.setContent {
-            WeatherFeedScreen(emptyList(),true, {})
+            WeatherFeedScreen(emptyList(),true, {}, {})
         }
 
         composeTestRule
@@ -34,7 +34,7 @@ class WeatherFeedScreenTest {
     @Test
     fun feed_whenHasAlerts_showsAlerts() {
         composeTestRule.setContent {
-            WeatherFeedScreen(FakeWeatherAlertsRepository.fakeAlerts,false, {})
+            WeatherFeedScreen(FakeWeatherAlertsRepository.fakeAlerts,false, {}, {})
         }
 
         composeTestRule

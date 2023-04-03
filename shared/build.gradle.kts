@@ -146,5 +146,7 @@ android {
 sqldelight {
     database("AppDatabase") {
         packageName = "com.didi"
+        version = 2 // added this line only
+
     }
 }
