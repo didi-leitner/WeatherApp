@@ -5,7 +5,10 @@ package com.didi.weatherapp.repository.fake
 import com.didi.weatherapp.model.WeatherAlert
 import com.didi.weatherapp.network.dto.ZoneNO
 import com.didi.weatherapp.repository.interfaces.IWeatherAlertsRepository
+import kotlinx.coroutines.channels.BufferOverflow
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.datetime.Clock
 
@@ -30,15 +33,24 @@ class FakeWeatherAlertsRepository: IWeatherAlertsRepository {
         val fakeAlerts = listOf<WeatherAlert>(l1, l2, l3, l4, l5, l6)
     }
 
+    private val wAlertsFlow: MutableSharedFlow<List<WeatherAlert>> =
+        MutableSharedFlow(replay = 1, onBufferOverflow = BufferOverflow.DROP_OLDEST)
+
+
     override fun getAlertFromDB(id: String) = flowOf(fakeAlerts.find { it.id == id })
 
-    override fun getAlertsFromDB(): Flow<List<WeatherAlert>> {
-        TODO("Not yet implemented")
-    }
-   
+    override fun getAlertsFromDB() = wAlertsFlow
+
+
 
     override suspend fun refreshAlertsFromAPI(): List<WeatherAlert> {
-        return listOf(l2, l3)
+        delay(1000)
+        val l7 = WeatherAlert("id7","wildfire", date, date, "sndr", "description6", "Severe", "Likely", "Expected", affectedZones.subList(0,1), null)
+        val list = fakeAlerts.toMutableList()
+        list.add(l7)
+
+        return list
+
     }
 
     override suspend fun getAllAlertsIOS(): List<WeatherAlert> {
@@ -47,5 +59,9 @@ class FakeWeatherAlertsRepository: IWeatherAlertsRepository {
 
     override suspend fun getZoneInfoFromAPI(zoneCode: String): ZoneNO? {
         TODO("Not yet implemented")
+    }
+
+    fun sendWeatherAlert(wAlerts: List<WeatherAlert>) {
+        wAlertsFlow.tryEmit(wAlerts)
     }
 }

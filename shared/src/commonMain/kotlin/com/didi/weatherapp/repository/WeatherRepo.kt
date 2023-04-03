@@ -1,32 +1,93 @@
 package com.didi.weatherapp.repository
 
-import com.didi.weatherapp.WeatherAppSDK
+
+import com.didi.weatherapp.db.Database
+import com.didi.weatherapp.db.DatabaseDriverFactory
 import com.didi.weatherapp.model.WeatherAlert
+import com.didi.weatherapp.network.WeatherApi
 import com.didi.weatherapp.network.dto.ZoneNO
 import com.didi.weatherapp.repository.interfaces.IWeatherAlertsRepository
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.runBlocking
 
-class WeatherRepo(private val sdk: WeatherAppSDK) : IWeatherAlertsRepository {
 
+class WeatherRepo (databaseDriverFactory: DatabaseDriverFactory): IWeatherAlertsRepository {
+    private val database = Database(databaseDriverFactory)
+    private val api = WeatherApi()
+
+    @Throws(Exception::class)
     override fun getAlertFromDB(id: String): Flow<WeatherAlert?> {
-        return sdk.getAlertFromDB(id)
+        return database.getWeatherAlert(id)
     }
+    @Throws(Exception::class)
     override fun getAlertsFromDB(): Flow<List<WeatherAlert>> {
-        return  sdk.getAlertsFromDB()/*.map {
-            it.map { WeatherAlert(it.id, it.event, it.startDateUTC, it.endDateUTC, it.sender) }
-        }*/
+        return database.getWeatherAlerts()
     }
 
+    @Throws(Exception::class)
     override suspend fun refreshAlertsFromAPI(): List<WeatherAlert> {
-        return sdk.refreshLaunchesFromAPI()/*.map { WeatherAlert(it.id, it.event, it.startDateUTC, it.endDateUTC, it.sender) }*/
+
+        try {
+            return api.getWeatherAlerts().also {
+                database.createWeatherAlert(it, clear = true)
+            }
+        }catch (ex: Exception){
+            ex.printStackTrace()
+        }
+
+        return emptyList()
+
+
     }
 
-    override suspend fun getAllAlertsIOS(): List<WeatherAlert> {
-        return sdk.getAllLaunchesOld()/*.map { WeatherAlert(it.id, it.event, it.startDateUTC, it.endDateUTC, it.sender) }*/
-    }
-
+    @Throws(Exception::class)
     override suspend fun getZoneInfoFromAPI(zoneCode: String): ZoneNO? {
-        return sdk.getZoneInfoFromAPI(zoneCode)
+
+        try {
+            return api.getZoneInfo(zoneCode)
+        }catch (ex: Exception){
+            ex.printStackTrace()
+        }
+
+        return null
+
+
     }
+
+    //old method
+    @Throws(Exception::class)
+    override suspend fun getAllAlertsIOS(): List<WeatherAlert> {
+
+        val cachedLaunches = database.getAllAlertsIOS()
+        if (cachedLaunches.isNotEmpty()) {
+            return cachedLaunches
+        } else {
+
+            try {
+
+                return runBlocking (Dispatchers.Default){
+
+                    api.getWeatherAlerts().also {
+
+                        //database.clearDatabase()
+                        database.createWeatherAlert(it, true)
+                    }
+
+                }
+
+
+
+            }catch (e: Exception){
+                e.printStackTrace()
+            }
+
+        }
+
+        return emptyList()
+    }
+
+
+
+
 }

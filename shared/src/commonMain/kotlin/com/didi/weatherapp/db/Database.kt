@@ -29,7 +29,7 @@ internal class Database(databaseDriverFactory: DatabaseDriverFactory) {
 
 
     //using this for iOS only, until there's an official solution for flow collection in swift, of better support
-    fun getAllAlertsOld(): List<WeatherAlert> {
+    fun getAllAlertsIOS(): List<WeatherAlert> {
         return dbQuery.selectAllAlerts(::mapWAlertSelecting).executeAsList()
     }
 

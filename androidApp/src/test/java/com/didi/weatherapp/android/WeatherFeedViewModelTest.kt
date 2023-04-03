@@ -2,8 +2,8 @@ package com.didi.weatherapp.android
 
 import com.didi.weatherapp.android.feed.WeatherFeedViewModel
 import com.didi.weatherapp.android.testing.MainDispatcherRule
-import com.didi.weatherapp.android.testing.fakeRepositories.FakeWeatherAppRepository
 import com.didi.weatherapp.model.WeatherAlert
+import com.didi.weatherapp.repository.fake.FakeWeatherAlertsRepository
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.launch
@@ -19,14 +19,14 @@ class WeatherFeedViewModelTest {
     @get:Rule
     val dispatcherRule = MainDispatcherRule()
 
-    private val weatherRepo = FakeWeatherAppRepository()
+    private val weatherRepo = FakeWeatherAlertsRepository()
 
     private lateinit var viewModel: WeatherFeedViewModel
 
     @Before
     fun setup() {
         viewModel = WeatherFeedViewModel(repoAlerts = weatherRepo,)
-        weatherRepo.sendWeatherAlert(FakeWeatherAppRepository.fakeAlerts)
+        weatherRepo.sendWeatherAlert(FakeWeatherAlertsRepository.fakeAlerts)
 
     }
 
@@ -59,8 +59,8 @@ class WeatherFeedViewModelTest {
 
                     wAlerts.addAll(it)
 
-                    assertEquals(wAlerts[0], FakeWeatherAppRepository.fakeAlerts[0], )
-                    assertEquals(wAlerts[1], FakeWeatherAppRepository.fakeAlerts[1])
+                    assertEquals(wAlerts[0], FakeWeatherAlertsRepository.fakeAlerts[0], )
+                    assertEquals(wAlerts[1], FakeWeatherAlertsRepository.fakeAlerts[1])
 
                     //first state from DB
                     if(count == 0){

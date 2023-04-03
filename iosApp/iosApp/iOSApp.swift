@@ -6,7 +6,7 @@ import shared
 struct iOSApp: App {
  
 
-    let repo = WeatherRepo(sdk: WeatherAppSDK(databaseDriverFactory: DatabaseDriverFactory()))
+    let repo = WeatherRepo(databaseDriverFactory: DatabaseDriverFactory())
 
     var body: some Scene {
         WindowGroup {
